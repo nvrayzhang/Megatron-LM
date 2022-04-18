@@ -4,7 +4,7 @@ IMAGE=pytorch2108
 stage=0
 
 # INPUT="/raid/data/wiki_zh/AB/wiki_00"
-INPUT=/raid/data/wiki_zh/wiki_zh_json/wiki_zh_2019_full.json
+INPUT=/data/converted/train.json
 # VOCAB=vocab/bert-chinese-expanded-vocab.txt   # added a few chinese symbols
 # VOCAB=vocab/jq/jq-tokens.txt.0.vocab
 VOCAB=vocab/jq/jq-tokens.txt.1.vocab
