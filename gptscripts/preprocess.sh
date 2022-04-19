@@ -7,7 +7,7 @@ INPUT=/data/converted/train.json
 
 VOCAB=${MEGATRON}/vocab/clue.vocab
 
-KEYS=content
+KEYS=text
 DATA_PREFIX=${MEGATRON}/data/oscar
 
 MAX_LEN=512
@@ -17,8 +17,7 @@ DEBUG=0
 
 # EXE=tools/zh/preprocess_data_zh.py   # For Chinese
 EXE=${MEGATRON}/tools/zh/preprocess_new2016zh.py   # For Chinese
-docker exec ${IMAGE} bash -c "cd `pwd`; \
-cd ${MEGATRON}; \
+docker exec ${IMAGE} bash -c "cd ${MEGATRON}; \
 python ${EXE} \
        --input '${INPUT}' \
        --output-prefix ${DATA_PREFIX} \

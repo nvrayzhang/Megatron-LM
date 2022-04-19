@@ -115,11 +115,12 @@ def main():
     pool = multiprocessing.Pool(args.workers, initializer=encoder.initializer)
 
     all_samples = []
-    for filename in glob.glob(args.input):
-      print("Opening file: ", filename, flush=True)
-      with open(filename, 'r', encoding='utf-8') as fin:
-        samples = json.load(fin)
-      all_samples.extend(samples)
+    with open(args.input, 'r', encoding='utf-8') as f:
+      print("Opening file: ", args.input, flush=True)
+      lines = f.readlines()
+      for line in lines:
+        sample = json.loads(line)
+      all_samples.extend(sample)
 
     if args.debug > 0:
       print("Select {} samples for debug!".format(args.debug))
