@@ -3,30 +3,25 @@
 IMAGE=pytorch2203
 MEGATRON=/home/nvidia/Projects/Megatron-LM
 
-INPUT=/data/converted/train.json
+INPUT=/data/converted/debug.json
 
-VOCAB=${MEGATRON}/vocab/jq/jq-tokens.txt.2.vocab
+VOCAB=${MEGATRON}/vocab/RoBERTa-wwm-ext-large.vocab
 
 KEYS=text
 DATA_PREFIX=${MEGATRON}/data/oscar
 
-MAX_LEN=512
-SEED=13
 WORKERS=8
-DEBUG=0
+
 
 # EXE=tools/zh/preprocess_data_zh.py   # For Chinese
-EXE=${MEGATRON}/tools/zh/preprocess_new2016zh.py   # For Chinese
+EXE=${MEGATRON}/tools/preprocess_data.py   # For Chinese
 docker exec ${IMAGE} bash -c "cd ${MEGATRON}; \
 python ${EXE} \
        --input '${INPUT}' \
        --output-prefix ${DATA_PREFIX} \
        --vocab ${VOCAB} \
        --json-keys ${KEYS} \
-       --max-sent-length ${MAX_LEN} \
-       --debug ${DEBUG} \
-       --seed ${SEED} \
        --dataset-impl mmap \
-       --split-sentences \
        --workers ${WORKERS} \
-       --tokenizer-type BertWordPieceLowerCase"
+       --tokenizer-type BertWordPieceLowerCase \
+       "

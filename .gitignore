@@ -2,3 +2,6 @@ __pycache__
 /*.txt
 /*.ipynb
 /data
+*.o
+*.so
+*ninja*

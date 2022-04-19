@@ -5,7 +5,7 @@ stage=0
 MEGATRON=/home/nvidia/Projects/Megatron-LM
 INPUT=/data/converted/train.json
 
-VOCAB=vocab/clue.vocab
+VOCAB=${MEGATRON}/vocab/RoBERTa-wwm-ext-large.vocab
 
 if [ ${stage} -eq 0 ]; then
  #EXE=tools/analyze_vocab.py
