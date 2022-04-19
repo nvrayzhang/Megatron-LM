@@ -15,7 +15,7 @@ import multiprocessing
 import os
 import sys
 # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
-sys.path.append("/home/jqi/work/megatron")
+sys.path.append("/home/nvidia/Projects/Megatron-LM")
 import time
 import glob
 from tqdm import tqdm
@@ -23,7 +23,6 @@ from tqdm import tqdm
 from tools.zh.utils import zng
 from megatron.tokenizer import build_tokenizer
 from collections import Counter
-
 
 class Encoder(object):
     def __init__(self, args):
@@ -63,6 +62,7 @@ class Encoder(object):
 
         return book
 
+
 def get_args():
     parser = argparse.ArgumentParser()
     group = parser.add_argument_group(title='input data')
@@ -73,9 +73,9 @@ def get_args():
 #   group.add_argument('--keep-newlines', action='store_true', help='Keep newlines between sentences when splitting.')
 
     group = parser.add_argument_group(title='tokenizer')
-    group.add_argument('--tokenizer-type', type=str, # required=True,
+    group.add_argument('--tokenizer-type', type=str,  # required=True,
                        default='BertWordPieceLowerCase',
-                       choices=['BertWordPieceLowerCase','BertWordPieceCase',
+                       choices=['BertWordPieceLowerCase', 'BertWordPieceCase',
                                 'GPT2BPETokenizer'],
                        help='What type of tokenizer to use.')
     group.add_argument('--vocab-file', type=str,
@@ -121,16 +121,15 @@ def main():
     encoder.initializer()
 
     occured = Counter()
-    files = glob.glob(args.input)
-    for filename in files:
-      print("Opening input file: ", filename)
+    with open(args.input, 'r', encoding='utf-8') as f:
       start_t = time.time()
-      with open(filename, 'r', encoding='utf-8') as fin:
-        samples = json.load(fin)
-        for s in tqdm(samples):
-          encoder.encode(s, occured)
+      # all json dict store in one file
+      lines = f.readlines()
+      print("Opening input file: ", args.input)
+      for line in tqdm(lines):
+        sample = json.loads(line)
+        encoder.encode(sample, occured)
       print("Done processing, time: {}".format(time.time() - start_t))
-
 
     tokenizer = encoder.tokenizer
     tokenizer.print_unknowns("unknown_tokens.txt")
@@ -146,7 +145,7 @@ def main():
         f_absent.write("ID: {:5d}, Token: {}\n".format(token, token_str))
     f_shown.close()
     f_absent.close()
-       #print("ID: {}, Token: {}".format(token, tokenizer.decode_token_ids((token,))))
+    #print("ID: {}, Token: {}".format(token, tokenizer.decode_token_ids((token,))))
 
 
 if __name__ == '__main__':

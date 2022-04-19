@@ -1,23 +1,21 @@
 #!/bin/bash
 
-IMAGE=pytorch2108
+IMAGE=pytorch2203
 stage=0
-
-# INPUT="/raid/data/wiki_zh/AB/wiki_00"
+MEGATRON=/home/nvidia/Projects/Megatron-LM
 INPUT=/data/converted/train.json
-# VOCAB=vocab/bert-chinese-expanded-vocab.txt   # added a few chinese symbols
-# VOCAB=vocab/jq/jq-tokens.txt.0.vocab
-VOCAB=vocab/jq/jq-tokens.txt.1.vocab
+
+VOCAB=vocab/clue.vocab
 
 if [ ${stage} -eq 0 ]; then
  #EXE=tools/analyze_vocab.py
-  EXE=tools/find_unknowns.py
-  docker exec ${IMAGE} bash -c "cd `pwd`; \
+  EXE=tools/zh/find_unknowns.py
+  docker exec ${IMAGE} bash -c "cd ${MEGATRON};\
   set -f;
   python ${EXE} \
          --input ${INPUT} \
          --vocab ${VOCAB} \
-         --workers 1 \
+         --workers 16 \
          --tokenizer-type BertWordPieceLowerCase | tee last_run.log"
   exit 0
 fi

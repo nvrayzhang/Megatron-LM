@@ -1,0 +1,8 @@
+Running find unknowns
+Vocab file: vocab/clue.vocab
+> building BertWordPieceLowerCase tokenizer ...
+ > padded vocab (size: 8023) with 41 dummy tokens (new size: 8064)
+Opening input file:  /data/converted/train.json
+Done processing, time: 125.72290062904358
+Save unknown tokens to unknown_tokens.txt
+Save shown tokens and absent tokens.

@@ -1,17 +1,16 @@
 #!/bin/bash
 
-IMAGE=pytorch2108
-MEGATRON=/home/jqi/work/megatron
+IMAGE=pytorch2203
+MEGATRON=/home/nvidia/Projects/Megatron-LM
 
-# INPUT=/raid/data/nlp-zh/nlp-chinese-corpus/new2016zh/files/new2016zh_data_1.json
-INPUT=/raid/data/nlp-zh/nlp-chinese-corpus/new2016zh/files/new2016zh_data_*.json
+INPUT=/data/converted/train.json
 
-VOCAB=${MEGATRON}/vocab/jq/jq-tokens.txt.2.vocab
-# VOCAB=vocab/jq.zh.vocab
+VOCAB=${MEGATRON}/vocab/clue.vocab
+
 KEYS=content
-DATA_PREFIX=${MEGATRON}/data/new2016/jq2-vocab/full_less128
+DATA_PREFIX=${MEGATRON}/data/oscar
 
-MAX_LEN=128
+MAX_LEN=512
 SEED=13
 WORKERS=16
 DEBUG=0
