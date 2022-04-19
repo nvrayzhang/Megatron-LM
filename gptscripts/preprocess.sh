@@ -5,14 +5,14 @@ MEGATRON=/home/nvidia/Projects/Megatron-LM
 
 INPUT=/data/converted/train.json
 
-VOCAB=${MEGATRON}/vocab/clue.vocab
+VOCAB=${MEGATRON}/vocab/jq/jq-tokens.txt.2.vocab
 
 KEYS=text
 DATA_PREFIX=${MEGATRON}/data/oscar
 
 MAX_LEN=512
 SEED=13
-WORKERS=16
+WORKERS=8
 DEBUG=0
 
 # EXE=tools/zh/preprocess_data_zh.py   # For Chinese

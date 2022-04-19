@@ -120,7 +120,7 @@ def main():
       lines = f.readlines()
       for line in lines:
         sample = json.loads(line)
-      all_samples.extend(sample)
+      all_samples.append(sample)
 
     if args.debug > 0:
       print("Select {} samples for debug!".format(args.debug))
