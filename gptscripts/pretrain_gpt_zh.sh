@@ -8,7 +8,7 @@ MEGATRON=/home/nvidia/Projects/Megatron-LM
 VOCAB=${MEGATRON}/vocab/RoBERTa-wwm-ext-large.vocab
 DATA_PATH=${MEGATRON}/data/oscar_text_document
 
-EXE=${MEGATRON}/pretrain_gpt.py
+EXE=${MEGATRON}/pretrain_gpt_zh.py
 
 CHECKPOINT_PATH=/tmp/gpt
 mkdir -p ${CHECKPOINT_PATH}

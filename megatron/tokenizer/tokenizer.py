@@ -41,6 +41,11 @@ def build_tokenizer(args):
     elif args.tokenizer_type == 'GPT2BPETokenizer':
         assert args.merge_file is not None
         tokenizer = _GPT2BPETokenizer(args.vocab_file, args.merge_file)
+
+    elif args.tokenizer_type == 'GPT2BertWordPieceTokenizer':
+        tokenizer = _GPT2BertWordPieceTokenizer(vocab_file=args.vocab_file,
+                                                lower_case=True,
+                                                vocab_extra_ids=args.vocab_extra_ids)
     else:
         raise NotImplementedError('{} tokenizer is not '
                                   'implemented.'.format(args.tokenizer_type))
@@ -163,7 +168,6 @@ class _BertWordPieceTokenizer(AbstractTokenizer):
     # JQ
     def print_unknowns(self, filename):
       self.tokenizer.print_unknowns(filename)
-
 
     def add_token(self, token):
         if token not in self.vocab:
@@ -290,6 +294,21 @@ class _GPT2BPETokenizer(AbstractTokenizer):
 
     def detokenize(self, token_ids):
         return self.tokenizer.decode(token_ids)
+
+    @property
+    def eod(self):
+        return self.eod_id
+
+
+class _GPT2BertWordPieceTokenizer(_BertWordPieceTokenizer):
+
+    def __init__(self, vocab_file, lower_case=True, vocab_extra_ids=0):
+        super(_GPT2BertWordPieceTokenizer, self).__init__(vocab_file, lower_case, vocab_extra_ids)
+
+        # RZ: add special [EOD] token for wordpiece to support chinese gpt
+        self._eod_token = '[EOD]'
+        self.add_token(self._eod_token)
+        self.eod_id = self.vocab.get(self._eod_token)
 
     @property
     def eod(self):

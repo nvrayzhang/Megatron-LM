@@ -23,5 +23,6 @@ python ${EXE} \
        --json-keys ${KEYS} \
        --dataset-impl mmap \
        --workers ${WORKERS} \
-       --tokenizer-type BertWordPieceLowerCase \
+       --tokenizer-type GPT2BertWordPieceTokenizer \
+       --append-eod
        "
