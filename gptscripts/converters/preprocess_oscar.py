@@ -1,11 +1,12 @@
 import os
 import json 
 
-FILE_PATH = r'/data/nlp-zh/oscarcorpus/train' 
+TYPE = r"train"
+FILE_PATH = r'/data/nlp-zh/oscarcorpus/' + TYPE
 SAVE_PATH = r'/data/converted'
 
 def write_line(text):
-    with open(os.path.join(SAVE_PATH, "train.json"), "a", encoding='utf-8') as f:
+    with open(os.path.join(SAVE_PATH, TYPE + ".json"), "a", encoding='utf-8') as f:
         f.write(json.dumps({'text':text}, ensure_ascii=False) + '\n')
 
 def main():

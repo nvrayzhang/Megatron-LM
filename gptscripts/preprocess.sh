@@ -5,7 +5,7 @@ MEGATRON=/home/nvidia/Projects/Megatron-LM
 
 INPUT=/data/converted/debug.json
 
-VOCAB=${MEGATRON}/vocab/RoBERTa-wwm-ext-large.vocab
+VOCAB=${MEGATRON}/vocab/jq.zh.v2.vocab
 
 KEYS=text
 DATA_PREFIX=${MEGATRON}/data/oscar

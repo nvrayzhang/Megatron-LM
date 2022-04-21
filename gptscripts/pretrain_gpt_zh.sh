@@ -3,14 +3,13 @@
 IMAGE=pytorch2203
 
 
-
 MEGATRON=/home/nvidia/Projects/Megatron-LM
-VOCAB=${MEGATRON}/vocab/RoBERTa-wwm-ext-large.vocab
+VOCAB=${MEGATRON}/vocab/jq.zh.v2.vocab
 DATA_PATH=${MEGATRON}/data/oscar_text_document
 
 EXE=${MEGATRON}/pretrain_gpt_zh.py
 
-CHECKPOINT_PATH=/tmp/gpt
+CHECKPOINT_PATH=/data/checkpoint
 mkdir -p ${CHECKPOINT_PATH}
 LOG_PATH=${CHECKPOINT_PATH}/log
 
@@ -32,15 +31,15 @@ docker exec ${IMAGE} bash -c "cd ${MEGATRON}; \
 echo MASTER_ADDR=${MASTER_ADDR}; \
 echo MASTER_PORT=${MASTER_PORT}; \
 torchrun  ${EXE} \
-       --num-layers 24 \
-       --hidden-size 1024 \
-       --num-attention-heads 16 \
+       --num-layers 6 \
+       --hidden-size 512 \
+       --num-attention-heads 4 \
        --micro-batch-size 4 \
        --global-batch-size 8 \
-       --seq-length 1024 \
-       --max-position-embeddings 1024 \
-       --train-iters 500000 \
-       --lr-decay-iters 320000 \
+       --seq-length 512 \
+       --max-position-embeddings 512 \
+       --train-iters 50000 \
+       --lr-decay-iters 32000 \
        --save ${CHECKPOINT_PATH} \
        --load ${CHECKPOINT_PATH} \
        --data-path ${DATA_PATH} \
