@@ -15,12 +15,35 @@ LOG_PATH=${CHECKPOINT_PATH}/log
 
 
 
+NUM_LAYERS=10
+HIDDEN_SIZE=512
+NUM_ATTENTION_HEADS=4
+MICRO_BATCH_SIZE=4
+GLOBAL_BATCH_SIZE=8
+SEQ_LENGTH=1024
+MAX_POSITION_EMBEDDINGS=1024
+TRAIN_ITERS=50000
+LR_DECAY_ITERS=30000
+
+"
+       --num_layers $NUM_LAYERS \
+       --hidden-size $HIDDEN_SIZE \
+       --num-attention-heads $NUM_ATTENTION_HEADS \
+       --micro-batch-size $MICRO_BATCH_SIZE \
+       --global-batch-size $GLOBAL_BATCH_SIZE \
+       --seq-length $SEQ_LENGTH \
+       --max-position-embeddings $MAX_POSITION_EMBEDDINGS \
+       --train-iters $TRAIN_ITERS \
+       --lr-decay-iters $LR_DECAY_ITERS \
+"
+
 MASTER_ADDR=localhost
 MASTER_PORT=7000
 NNODES=1
 NODE_RANK=0
 GPUS_PER_NODE=2
 WORLD_SIZE=$(($GPUS_PER_NODE*$NNODES))
+
 DISTRIBUTED_ARGS="--nproc_per_node $GPUS_PER_NODE \
                   --nnodes $NNODES \
                   --node_rank $NODE_RANK \
