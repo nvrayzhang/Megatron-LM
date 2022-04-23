@@ -46,7 +46,7 @@ OUTPUT_ARGS="--log-interval 100 \
 docker exec ${IMAGE} bash -c "cd ${MEGATRON}; mkdir ${CHECKPOINT_PATH}; mkdir ${LOG_PATH}; \
 python -m torch.distributed.launch ${DISTRIBUTED_ARGS} \
        ${EXE} \
-       ${TENSORBOARD_ARGS} \
+       ${OUTPUT_ARGS} \
        --tensor-model-parallel-size 2 \
        --pipeline-model-parallel-size 2 \
        --num-layers 24 \
