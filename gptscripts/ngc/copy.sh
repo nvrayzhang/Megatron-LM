@@ -20,15 +20,15 @@ INSTANCE=cpu.x86.tiny
 # DATASET=/mnt/oscar_zh
 WORKSPACE=/mnt/gpt2-zh
 WORKDIR=${WORKSPACE}/Megatron-LM
-DATADIR=${WORKDIR}/data/oscar
+# DATADIR=${WORKDIR}/data/oscar
 # EXE=${WORKDIR}/gptscripts/convert_oscar.py
 
 # COMMAND="pwd; ls ${DATASET};rm -rf ${DATADIR}; mkdir ${DATADIR}; cp -rf ${DATASET}/* ${DATADIR}/ ; sleep 3600"
 # COMMAND="sleep 2400"
 # --datasetid ${DATASETID}:${DATASET} \
-COMMAND="cd ${WORKDIR}; python ./gptscripts/convert_oscar.py --input_path ./data/oscar/ --output_path ./data/; sleep 3600"
+COMMAND="cd ${WORKDIR}; python ./gptscripts/convert_oscar.py --input_path ${WORKSPACE}/oscar/ --output_path ./data/; sleep 3600"
 ngc batch run --name ${NAME} --image ${IMAGE} --instance ${INSTANCE} --commandline "${COMMAND}" --result /results \
     --preempt RUNONCE \
-    --total-runtime 21600s \
+    --total-runtime 3600s \
     --ace nv-us-west-2 --org nvidian --team sae \
     --workspace ZydrZx5GQmSSIYDaJmulLw:${WORKSPACE}:RW \
