@@ -1,17 +1,15 @@
 #!/bin/bash
 
 # NAME=ml-model.notamodel-wiki-zh-process.exempt-tc-gpu
-NAME=ml-model.bert-new2016-random
+NAME=ml-model.gpt2-zh-oscar
 # INSTANCE=cpu.x86.tiny
 # INSTANCE=dgx1v.16g.4.norm
-INSTANCE=dgxa100.40g.4.norm
-IMAGE=nvidia/pytorch:21.08-py3
+INSTANCE=dgxa100.40g.8.norm
+IMAGE=nvidia/pytorch:22.03-py3
 
-DATASETID=96766  # new2016
-DATASETID=97829  # new2016 jqi vocab
-DATASETID=97861  # new2016 clue vocab
+DATASETID=99309   # oscar
 DATASET=/mount/new2016
-WORKSPACE=/mount/megatron
+WORKSPACE=gpt2-zh
 WORKDIR=${WORKSPACE}/Megatron-LM
 DATADIR=${WORKDIR}/data/bert/new2016
 DATA_PREFIX=${DATADIR}/full_less128

@@ -10,7 +10,7 @@ def get_args():
     return args
 
 def write_line(text, args):
-    with open(os.path.join(args.output_path, "pl_oscar_zh.json"), "a", encoding='utf-8') as f:
+    with open(os.path.join(args.output_path, "oscar.json"), "a", encoding='utf-8') as f:
         f.write(json.dumps({'text':text}, ensure_ascii=False) + '\n')
 
 def main():
