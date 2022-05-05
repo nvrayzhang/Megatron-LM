@@ -1,11 +1,11 @@
-+------------------------+-----------------------+-----------------------+--------------+-----------------------+--------+---------------------+-------+-----------+
-| Id                     | Name                  | Description           | ACE          | Creator Username      | Shared | Created Date        | Owned | Size      |
-| ZydrZx5GQmSSIYDaJmulLw | gpt2-zh               |                       | nv-us-west-2 | Ray Zhang             | No     | 2022-04-22 07:51:06 | Yes   | 0 B       |
+# +------------------------+-----------------------+-----------------------+--------------+-----------------------+--------+---------------------+-------+-----------+
+# | Id                     | Name                  | Description           | ACE          | Creator Username      | Shared | Created Date        | Owned | Size      |
+# | ZydrZx5GQmSSIYDaJmulLw | gpt2-zh               |                       | nv-us-west-2 | Ray Zhang             | No     | 2022-04-22 07:51:06 | Yes   | 0 B       |
 
-+-------------------+------------+-------------------+-------------------+--------------+--------+------------+-----------+--------------+-------+---------+
-| Id                | Integer Id | Name              | Description       | ACE          | Shared | Size       | Status    | Created Date | Owned | Pre-pop |
-| PT7e0qA9R1icfYUty | 99309      | oscar_zh          |                   | nv-us-west-2 | No     | 78.97 GB   | COMPLETED | 2022-04-21   | Yes   | No      |
-
+# +-------------------+------------+-------------------+-------------------+--------------+--------+------------+-----------+--------------+-------+---------+
+# | Id                | Integer Id | Name              | Description       | ACE          | Shared | Size       | Status    | Created Date | Owned | Pre-pop |
+# | PT7e0qA9R1icfYUty | 99309      | oscar_zh          |                   | nv-us-west-2 | No     | 78.97 GB   | COMPLETED | 2022-04-21   | Yes   | No      |
+# | 0Mqh86FUT_2zqhnxbO5-4Q  | 99729      | oscarcorpus     |                 | nv-us-west-2 | No     | 55.72 GB   | COMPLETED | 2022-04-29   | Yes   | No      |
 
 
 import argparse

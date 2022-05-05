@@ -15,7 +15,7 @@ WORKERS=8
 
 # EXE=tools/zh/preprocess_data_zh.py   # For Chinese
 EXE=${MEGATRON}/tools/preprocess_data.py   # For Chinese
-docker exec ${IMAGE} bash -c "cd ${MEGATRON}; mkdir /data/upload/oscar ; \
+docker exec ${IMAGE} bash -c "pip install zhconv; cd ${MEGATRON}; mkdir /data/upload/oscar ; \
 python ${EXE} \
        --input '${INPUT}' \
        --output-prefix ${DATA_PREFIX} \
