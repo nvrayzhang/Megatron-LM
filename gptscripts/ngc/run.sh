@@ -9,7 +9,7 @@
 # | 0Mqh86FUT_2zqhnxbO5-4Q  | 99729      | oscarcorpus     |                 | nv-us-west-2 | No     | 55.72 GB   | COMPLETED | 2022-04-29   | Yes   | No      |
 
 # NAME=ml-model.notamodel-wiki-zh-process.exempt-tc-gpu
-NAME=ml-model.gpt2-zh-oscar
+NAME=ml-model.gpt2-zh-oscar-debug
 INSTANCE=dgxa100.40g.8.norm
 IMAGE=nvidia/pytorch:22.03-py3
 
@@ -52,7 +52,6 @@ OUTPUT_ARGS="--log-interval 100 \
               --tensorboard-dir ${LOG_PATH} \
               --tensorboard-log-interval 50 \
               --no-log-loss-scale-to-tensorboard \
-              --log-interval 100 \
               --save-interval ${SAVE_INTERVAL} \
               --eval-interval ${EVAL_INTERVAL} \
               --eval-iters 10 \
