@@ -10,8 +10,9 @@
 
 # NAME=ml-model.notamodel-wiki-zh-process.exempt-tc-gpu
 # NAME=ml-model.notamodel-gpt2-zh-oscar-debug.exempt-tc-gpu
-NAME=ml-model.gpt2-zh-oscar
+NAME=ml-model.gpt2-zh-oscar-base
 INSTANCE=dgxa100.40g.8.norm
+# INSTANCE=dgx1v.16g.8.norm
 # INSTANCE=cpu.x86.tiny
 IMAGE=nvidia/pytorch:22.03-py3
 
@@ -38,10 +39,10 @@ SAVE_INTERVAL=10000
 EVAL_INTERVAL=1000
 
 
-GPUS_PER_NODE=4
+GPUS_PER_NODE=8
 MASTER_ADDR=localhost
 MASTER_PORT=7000
-NNODES=2
+NNODES=1
 NODE_RANK=0
 WORLD_SIZE=$(($GPUS_PER_NODE*$NNODES))
 
@@ -63,10 +64,12 @@ OUTPUT_ARGS="--log-interval 100 \
               --load ${CHECKPOINT_PATH}"
 
 # rm -rf ${WORKSPACE}/oscar; \
+# cp -rf ${DATADIR}/* ${WORKSPACE}/oscar; \
 COMMAND="cd ${MEGATRON}; \
        pip install zhconv; \
        mkdir  ${WORKSPACE}/oscar; \
-       cp -rf ${DATADIR}/* ${WORKSPACE}/oscar; \
+       mkdir ${CHECKPOINT_PATH};
+       mkdir ${CHECKPOINT_PATH}/results; \
        python -m torch.distributed.launch ${DISTRIBUTED_ARGS} \
        ${EXE} \
        ${OUTPUT_ARGS} \
@@ -99,7 +102,7 @@ ngc batch run --ace nv-us-west-2 --org nvidian --team sae \
               --image ${IMAGE} \
               --instance ${INSTANCE} \
               --commandline "${COMMAND}" \
-              --result ${WORKSPACE}/results \
+              --result ${CHECKPOINT_PATH}/results \
               --preempt RUNONCE \
               --datasetid ${DATASETID}:${DATADIR} \
               --workspace ZydrZx5GQmSSIYDaJmulLw:${WORKSPACE}:RW
