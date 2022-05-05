@@ -9,8 +9,10 @@
 # | 0Mqh86FUT_2zqhnxbO5-4Q  | 99729      | oscarcorpus     |                 | nv-us-west-2 | No     | 55.72 GB   | COMPLETED | 2022-04-29   | Yes   | No      |
 
 # NAME=ml-model.notamodel-wiki-zh-process.exempt-tc-gpu
-NAME=ml-model.gpt2-zh-oscar-debug
+# NAME=ml-model.notamodel-gpt2-zh-oscar-debug.exempt-tc-gpu
+NAME=ml-model.gpt2-zh-oscar
 INSTANCE=dgxa100.40g.8.norm
+# INSTANCE=cpu.x86.tiny
 IMAGE=nvidia/pytorch:22.03-py3
 
 
@@ -60,12 +62,11 @@ OUTPUT_ARGS="--log-interval 100 \
               --save ${CHECKPOINT_PATH} \
               --load ${CHECKPOINT_PATH}"
 
-
+# rm -rf ${WORKSPACE}/oscar; \
 COMMAND="cd ${MEGATRON}; \
        pip install zhconv; \
-       rm -rf ${WORKSPACE}/oscar; \
        mkdir  ${WORKSPACE}/oscar; \
-       cp -rf ${DATADIR}/* oscar; \
+       cp -rf ${DATADIR}/* ${WORKSPACE}/oscar; \
        python -m torch.distributed.launch ${DISTRIBUTED_ARGS} \
        ${EXE} \
        ${OUTPUT_ARGS} \
