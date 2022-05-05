@@ -18,13 +18,14 @@ WORKSPACE=/gpt2-zh
 DATASETID=99729    # oscar
 DATADIR=/data
 MEGATRON=${WORKSPACE}/Megatron-LM
-DATA_PATH=${DATADIR}/oscar/oscar_text_document
+DATA_PATH=${WORKSPACE}/oscar/oscar_text_document
 DATAKEY=text
 VOCAB_PATH=${MEGATRON}/vocab/jq.zh.v2.vocab
 EXE=${MEGATRON}/pretrain_gpt_zh.py
+CHECKPOINT_PATH=${WORKSPACE}/ckp/gpt-oscar
 LOG_PATH=${CHECKPOINT_PATH}/log
 LOGFILE=${CHECKPOINT_PATH}/cmdlog.log
-CHECKPOINT_PATH=${WORKSPACE}/ckp/test
+
 
 # BATCH_PER_GPU=64
 # BATCH=512
@@ -38,7 +39,7 @@ EVAL_INTERVAL=1000
 GPUS_PER_NODE=4
 MASTER_ADDR=localhost
 MASTER_PORT=7000
-NNODES=1
+NNODES=2
 NODE_RANK=0
 WORLD_SIZE=$(($GPUS_PER_NODE*$NNODES))
 
@@ -60,17 +61,21 @@ OUTPUT_ARGS="--log-interval 100 \
               --load ${CHECKPOINT_PATH}"
 
 
-COMMAND="cd ${MEGATRON}; pip install zhconv; \
+COMMAND="cd ${MEGATRON}; \
+       pip install zhconv; \
+       rm -rf ${WORKSPACE}/oscar; \
+       mkdir  ${WORKSPACE}/oscar; \
+       cp -rf ${DATADIR}/* oscar; \
        python -m torch.distributed.launch ${DISTRIBUTED_ARGS} \
        ${EXE} \
        ${OUTPUT_ARGS} \
-       --tensor-model-parallel-size 2 \
-       --pipeline-model-parallel-size 2 \
+       --tensor-model-parallel-size 1 \
+       --pipeline-model-parallel-size 1 \
        --num-layers 24 \
        --hidden-size 1024 \
        --num-attention-heads 16 \
-       --micro-batch-size 4 \
-       --global-batch-size 16 \
+       --micro-batch-size 96 \
+       --global-batch-size 768 \
        --seq-length 1024 \
        --max-position-embeddings 1024 \
        --train-iters ${ITERS} \
