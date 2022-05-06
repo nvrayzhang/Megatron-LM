@@ -10,9 +10,9 @@
 
 # NAME=ml-model.notamodel-wiki-zh-process.exempt-tc-gpu
 # NAME=ml-model.notamodel-gpt2-zh-oscar-debug.exempt-tc-gpu
-NAME=ml-model.gpt2-zh-oscar-base
-INSTANCE=dgxa100.40g.8.norm
-# INSTANCE=dgx1v.16g.8.norm
+NAME=ml-model.gpt2-zh-oscar
+# INSTANCE=dgxa100.40g.8.norm
+INSTANCE=dgx1v.16g.8.norm
 # INSTANCE=cpu.x86.tiny
 IMAGE=nvidia/pytorch:22.03-py3
 
@@ -25,7 +25,7 @@ DATA_PATH=${WORKSPACE}/oscar/oscar_text_document
 DATAKEY=text
 VOCAB_PATH=${MEGATRON}/vocab/jq.zh.v2.vocab
 EXE=${MEGATRON}/pretrain_gpt_zh.py
-CHECKPOINT_PATH=${WORKSPACE}/ckp/gpt-oscar
+CHECKPOINT_PATH=${WORKSPACE}/ckp/gpt-oscar-v100
 LOG_PATH=${CHECKPOINT_PATH}/log
 LOGFILE=${CHECKPOINT_PATH}/cmdlog.log
 
@@ -78,8 +78,8 @@ COMMAND="cd ${MEGATRON}; \
        --num-layers 24 \
        --hidden-size 1024 \
        --num-attention-heads 16 \
-       --micro-batch-size 96 \
-       --global-batch-size 768 \
+       --micro-batch-size 32 \
+       --global-batch-size 256 \
        --seq-length 1024 \
        --max-position-embeddings 1024 \
        --train-iters ${ITERS} \
