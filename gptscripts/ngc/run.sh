@@ -12,7 +12,7 @@
 CKPNAME=oscar-1024sl
 # NAME=ml-model.notamodel-wiki-zh-process.exempt-tc-gpu
 # NAME=ml-model.notamodel-gpt2-zh-oscar-debug.exempt-tc-gpu
-NAME=ml-model.gpt2-zh-${CKPNAME}
+NAME=ml-model.gpt2-zh-${CKPNAME}.exempt-tc-gpu
 INSTANCE=dgxa100.40g.8.norm
 # INSTANCE=dgx1v.16g.8.norm
 # INSTANCE=cpu.x86.tiny
