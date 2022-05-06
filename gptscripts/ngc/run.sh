@@ -8,11 +8,13 @@
 # | PT7e0qA9R1icfYUty | 99309      | oscar_zh          |                   | nv-us-west-2 | No     | 78.97 GB   | COMPLETED | 2022-04-21   | Yes   | No      |
 # | 0Mqh86FUT_2zqhnxbO5-4Q  | 99729      | oscarcorpus     |                 | nv-us-west-2 | No     | 55.72 GB   | COMPLETED | 2022-04-29   | Yes   | No      |
 
+
+CKPNAME=oscar-1024sl
 # NAME=ml-model.notamodel-wiki-zh-process.exempt-tc-gpu
 # NAME=ml-model.notamodel-gpt2-zh-oscar-debug.exempt-tc-gpu
-NAME=ml-model.gpt2-zh-oscar
-# INSTANCE=dgxa100.40g.8.norm
-INSTANCE=dgx1v.16g.8.norm
+NAME=ml-model.gpt2-zh-${CKPNAME}
+INSTANCE=dgxa100.40g.8.norm
+# INSTANCE=dgx1v.16g.8.norm
 # INSTANCE=cpu.x86.tiny
 IMAGE=nvidia/pytorch:22.03-py3
 
@@ -25,7 +27,7 @@ DATA_PATH=${WORKSPACE}/oscar/oscar_text_document
 DATAKEY=text
 VOCAB_PATH=${MEGATRON}/vocab/jq.zh.v2.vocab
 EXE=${MEGATRON}/pretrain_gpt_zh.py
-CHECKPOINT_PATH=${WORKSPACE}/ckp/gpt-oscar-v100
+CHECKPOINT_PATH=${WORKSPACE}/ckp/${CKPNAME}
 LOG_PATH=${CHECKPOINT_PATH}/log
 LOGFILE=${CHECKPOINT_PATH}/cmdlog.log
 
@@ -65,10 +67,10 @@ OUTPUT_ARGS="--log-interval 100 \
 
 # rm -rf ${WORKSPACE}/oscar; \
 # cp -rf ${DATADIR}/* ${WORKSPACE}/oscar; \
-COMMAND="cd ${MEGATRON}; \
+# mkdir  ${WORKSPACE}/oscar; \
+COMMAND="nvidia-smi; cd ${MEGATRON}; \
        pip install zhconv; \
-       mkdir  ${WORKSPACE}/oscar; \
-       mkdir ${CHECKPOINT_PATH};
+       mkdir ${CHECKPOINT_PATH}; \
        mkdir ${CHECKPOINT_PATH}/results; \
        python -m torch.distributed.launch ${DISTRIBUTED_ARGS} \
        ${EXE} \
@@ -78,10 +80,10 @@ COMMAND="cd ${MEGATRON}; \
        --num-layers 24 \
        --hidden-size 1024 \
        --num-attention-heads 16 \
-       --micro-batch-size 32 \
-       --global-batch-size 256 \
-       --seq-length 1024 \
-       --max-position-embeddings 1024 \
+       --micro-batch-size 64 \
+       --global-batch-size 512 \
+       --seq-length ${MAX_SEQ_LEN} \
+       --max-position-embeddings ${MAX_SEQ_LEN} \
        --train-iters ${ITERS} \
        --lr-decay-iters 320000 \
        --data-path ${DATA_PATH} \
@@ -97,6 +99,7 @@ COMMAND="cd ${MEGATRON}; \
        --lr-warmup-fraction .01 \
        --fp16 | tee $LOGFILE"
 
+# --datasetid ${DATASETID}:${DATADIR} \
 ngc batch run --ace nv-us-west-2 --org nvidian --team sae \
               --name ${NAME} \
               --image ${IMAGE} \
@@ -104,5 +107,4 @@ ngc batch run --ace nv-us-west-2 --org nvidian --team sae \
               --commandline "${COMMAND}" \
               --result ${CHECKPOINT_PATH}/results \
               --preempt RUNONCE \
-              --datasetid ${DATASETID}:${DATADIR} \
               --workspace ZydrZx5GQmSSIYDaJmulLw:${WORKSPACE}:RW
