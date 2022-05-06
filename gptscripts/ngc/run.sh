@@ -9,11 +9,10 @@
 # | 0Mqh86FUT_2zqhnxbO5-4Q  | 99729      | oscarcorpus     |                 | nv-us-west-2 | No     | 55.72 GB   | COMPLETED | 2022-04-29   | Yes   | No      |
 
 
-CKPNAME=oscar-1024sl
-# NAME=ml-model.notamodel-wiki-zh-process.exempt-tc-gpu
-# NAME=ml-model.notamodel-gpt2-zh-oscar-debug.exempt-tc-gpu
+CKPNAME=oscar-512sl
 NAME=ml-model.gpt2-zh-${CKPNAME}.exempt-tc-gpu
-INSTANCE=dgxa100.40g.8.norm
+INSTANCE=dgxa100.40g.4.norm
+# INSTANCE=dgxa100.40g.8.norm
 # INSTANCE=dgx1v.16g.8.norm
 # INSTANCE=cpu.x86.tiny
 IMAGE=nvidia/pytorch:22.03-py3
@@ -32,21 +31,22 @@ LOG_PATH=${CHECKPOINT_PATH}/log
 LOGFILE=${CHECKPOINT_PATH}/cmdlog.log
 
 
-# BATCH_PER_GPU=64
-# BATCH=512
-LR=0.00015
-MAX_SEQ_LEN=1024
-ITERS=800000
-SAVE_INTERVAL=10000
-EVAL_INTERVAL=1000
-
-
-GPUS_PER_NODE=8
+GPUS_PER_NODE=4
 MASTER_ADDR=localhost
 MASTER_PORT=7000
 NNODES=1
 NODE_RANK=0
 WORLD_SIZE=$(($GPUS_PER_NODE*$NNODES))
+
+
+LR=0.00015
+MAX_SEQ_LEN=1024
+ITERS=800000
+SAVE_INTERVAL=10000
+EVAL_INTERVAL=1000
+MICRO_BATCH_SIZE=128
+GLOBAL_BATCH_SIZE=$(($GPUS_PER_NODE*$NNODES*$MICRO_BATCH_SIZE))
+
 
 DISTRIBUTED_ARGS="--nproc_per_node $GPUS_PER_NODE \
                   --nnodes $NNODES \
@@ -68,10 +68,10 @@ OUTPUT_ARGS="--log-interval 100 \
 # rm -rf ${WORKSPACE}/oscar; \
 # cp -rf ${DATADIR}/* ${WORKSPACE}/oscar; \
 # mkdir  ${WORKSPACE}/oscar; \
-COMMAND="nvidia-smi; cd ${MEGATRON}; \
+COMMAND="nvidia-smi; \
+       cd ${MEGATRON}; \
        pip install zhconv; \
-       mkdir ${CHECKPOINT_PATH}; \
-       mkdir ${CHECKPOINT_PATH}/results; \
+       mkdir ${CHECKPOINT_PATH}; mkdir ${CHECKPOINT_PATH}/results; mkdir ${LOG_PATH}; \
        python -m torch.distributed.launch ${DISTRIBUTED_ARGS} \
        ${EXE} \
        ${OUTPUT_ARGS} \
@@ -80,8 +80,8 @@ COMMAND="nvidia-smi; cd ${MEGATRON}; \
        --num-layers 24 \
        --hidden-size 1024 \
        --num-attention-heads 16 \
-       --micro-batch-size 64 \
-       --global-batch-size 512 \
+       --micro-batch-size ${MICRO_BATCH_SIZE} \
+       --global-batch-size ${GLOBAL_BATCH_SIZE} \
        --seq-length ${MAX_SEQ_LEN} \
        --max-position-embeddings ${MAX_SEQ_LEN} \
        --train-iters ${ITERS} \
