@@ -25,6 +25,12 @@ ITERS=50000
 SAVE_INTERVAL=10000
 EVAL_INTERVAL=1000
 
+# model parameters
+NUM_LAYERS=12
+HIDDEN_SIZE=768
+NUM_ATTENTION_HEADS=12
+MAX_SEQ_LEN=512
+
 DISTRIBUTED_ARGS="--nproc_per_node $GPUS_PER_NODE \
                   --nnodes $NNODES \
                   --node_rank $NODE_RANK \
@@ -47,15 +53,15 @@ docker exec ${IMAGE} bash -c "cd ${MEGATRON}; mkdir ${CHECKPOINT_PATH}; mkdir ${
 python -m torch.distributed.launch ${DISTRIBUTED_ARGS} \
        ${EXE} \
        ${OUTPUT_ARGS} \
-       --tensor-model-parallel-size 2 \
-       --pipeline-model-parallel-size 2 \
-       --num-layers 24 \
-       --hidden-size 1024 \
-       --num-attention-heads 16 \
-       --micro-batch-size 64 \
-       --global-batch-size 128 \
-       --seq-length 1024 \
-       --max-position-embeddings 1024 \
+       --tensor-model-parallel-size 1 \
+       --pipeline-model-parallel-size 1 \
+       --num-layers ${NUM_LAYERS} \
+       --hidden-size ${HIDDEN_SIZE} \
+       --num-attention-heads ${NUM_ATTENTION_HEADS}\
+       --micro-batch-size 128 \
+       --global-batch-size 256 \
+       --seq-length ${MAX_SEQ_LEN} \
+       --max-position-embeddings ${MAX_SEQ_LEN} \
        --train-iters ${ITERS} \
        --lr-decay-iters 320000 \
        --data-path $DATA_PATH \

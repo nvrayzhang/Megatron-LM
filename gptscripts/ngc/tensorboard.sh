@@ -1,12 +1,13 @@
 #!/bin/bash
 
-IMAGE=nvidia/pytorch:21.08-py3
-NAME=ml-model.notamodel-tensorboard
+IMAGE=nvidia/pytorch:22.03-py3
+NAME=ml-model.notamodel-tb-gpt-512sl
 INSTANCE=cpu.x86.tiny
 
 PORT=6006
 WORKSPACE=/gpt2-zh
-CHECKPOINT_PATH=${WORKSPACE}/ckp/gpt-oscar-v100
+CKPNAME=oscar-512sl
+CHECKPOINT_PATH=${WORKSPACE}/ckp/${CKPNAME}
 LOG_PATH=${CHECKPOINT_PATH}
 RESUTL=/result
 

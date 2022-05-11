@@ -9,11 +9,11 @@
 # | 0Mqh86FUT_2zqhnxbO5-4Q  | 99729      | oscarcorpus     |                 | nv-us-west-2 | No     | 55.72 GB   | COMPLETED | 2022-04-29   | Yes   | No      |
 
 
-CKPNAME=oscar-512sl
+CKPNAME=oscar-125m
 NAME=ml-model.gpt2-zh-${CKPNAME}.exempt-tc-gpu
-INSTANCE=dgxa100.40g.4.norm
+# INSTANCE=dgxa100.40g.4.norm
 # INSTANCE=dgxa100.40g.8.norm
-# INSTANCE=dgx1v.16g.8.norm
+INSTANCE=dgx1v.16g.8.norm
 # INSTANCE=cpu.x86.tiny
 IMAGE=nvidia/pytorch:22.03-py3
 
@@ -31,21 +31,27 @@ LOG_PATH=${CHECKPOINT_PATH}/log
 LOGFILE=${CHECKPOINT_PATH}/cmdlog.log
 
 
-GPUS_PER_NODE=4
+GPUS_PER_NODE=8
 MASTER_ADDR=localhost
 MASTER_PORT=7000
 NNODES=1
 NODE_RANK=0
 WORLD_SIZE=$(($GPUS_PER_NODE*$NNODES))
 
-
+# model parameters
 LR=0.00015
-MAX_SEQ_LEN=1024
-ITERS=800000
-SAVE_INTERVAL=10000
-EVAL_INTERVAL=1000
+
+ITERS=300000
+
 MICRO_BATCH_SIZE=128
 GLOBAL_BATCH_SIZE=$(($GPUS_PER_NODE*$NNODES*$MICRO_BATCH_SIZE))
+NUM_LAYERS=12
+HIDDEN_SIZE=768
+NUM_ATTENTION_HEADS=12
+MAX_SEQ_LEN=512
+
+SAVE_INTERVAL=10000
+EVAL_INTERVAL=1000
 
 
 DISTRIBUTED_ARGS="--nproc_per_node $GPUS_PER_NODE \
@@ -65,6 +71,8 @@ OUTPUT_ARGS="--log-interval 100 \
               --save ${CHECKPOINT_PATH} \
               --load ${CHECKPOINT_PATH}"
 
+
+
 # rm -rf ${WORKSPACE}/oscar; \
 # cp -rf ${DATADIR}/* ${WORKSPACE}/oscar; \
 # mkdir  ${WORKSPACE}/oscar; \
@@ -77,15 +85,15 @@ COMMAND="nvidia-smi; \
        ${OUTPUT_ARGS} \
        --tensor-model-parallel-size 1 \
        --pipeline-model-parallel-size 1 \
-       --num-layers 24 \
-       --hidden-size 1024 \
-       --num-attention-heads 16 \
+       --num-layers ${NUM_LAYERS} \
+       --hidden-size ${HIDDEN_SIZE} \
+       --num-attention-heads ${NUM_ATTENTION_HEADS} \
        --micro-batch-size ${MICRO_BATCH_SIZE} \
        --global-batch-size ${GLOBAL_BATCH_SIZE} \
        --seq-length ${MAX_SEQ_LEN} \
        --max-position-embeddings ${MAX_SEQ_LEN} \
        --train-iters ${ITERS} \
-       --lr-decay-iters 320000 \
+       --lr-decay-iters 120000 \
        --data-path ${DATA_PATH} \
        --vocab-file ${VOCAB_PATH} \
        --data-impl mmap \
